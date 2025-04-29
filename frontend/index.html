@@ -1,0 +1,104 @@
+<!-- File: index.html - iChat App Frontend
+     Description: Main HTML structure for the chat application interface.
+     Includes the initial login screen and the main chat screen.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-key="loginTitle">iChat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Main container for the entire application -->
+<!-- Initial screen shown on load for user login -->
+    <div id="app">
+        <div id="initial-screen">
+            <h1 data-i18n-key="loginTitle">iChat</h1>
+            <form id="user-form">
+                <label for="name" data-i18n-key="nameLabel">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email" data-i18n-key="emailLabel">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit" data-i18n-key="startChatButton">Start Chatting</button>
+            </form>
+<!-- Main chat interface, hidden initially -->
+<!-- Header section containing title, user info, and controls -->
+        </div>
+
+        <div id="chat-screen" style="display: none;">
+            <div id="chat-header">
+                <div class="header-left">
+                    <h2 data-i18n-key="chatTitle">Chat</h2>
+                    <span id="user-info"></span> <!-- Content set by JS -->
+                </div>
+                <div class="header-right">
+                    <!-- Language Switcher -->
+                    <div class="language-switcher">
+                        <button id="lang-en" class="icon-button lang-button" title="Switch to English">En</button>
+                        <button id="lang-de" class="icon-button lang-button" title="Auf Deutsch wechseln">De</button>
+                    </div>
+                    <button id="download-chat-button" class="icon-button" data-i18n-key="downloadButtonTitle" title="Download Chat History">
+                        <!-- Download Icon (Feather Icons) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span class="loading-spinner"></span> <!-- Spinner for loading state -->
+                    </button>
+<!-- Area where chat messages are displayed -->
+                    <button id="logout-button" data-i18n-key="logoutButton">Logout</button>
+                </div>
+<!-- Input area for typing messages, uploading files, and sending -->
+            </div>
+            <div id="message-display">
+                <!-- Messages will be appended here -->
+            </div>
+            <div id="message-input">
+                 <!-- Upload Button - uses label for input trigger -->
+                 <label for="file-upload" class="upload-button icon-button" data-i18n-key="uploadButtonTitle" title="Upload File" aria-label="Upload document or image">
+                     <!-- Paperclip Icon (Feather Icons) -->
+                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                     <span class="loading-spinner"></span> <!-- Spinner for loading state -->
+                 </label>
+                 <input
+                     type="file"
+                     id="file-upload"
+                     accept=".txt,.pdf,.doc,.docx,.png,.jpg,.jpeg"
+                      style="display: none;">
+
+                 <!-- Web Search Toggle Button -->
+                 <button id="web-search-toggle" class="icon-button" data-i18n-key="webSearchButtonTitle" title="Toggle Web Search (Next Message)" aria-label="Toggle web search for next message">
+                     <!-- Globe Icon (Feather Icons) -->
+                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                 </button>
+
+                 <!-- Message Text Input -->
+                 <textarea
+                    id="user-message"
+                    data-i18n-key="messagePlaceholder"
+                    placeholder="Type your message..."
+                    aria-label="Message input"
+                    maxlength="1000"
+                    rows="1"></textarea>
+
+                 <!-- Send Button -->
+                 <button id="send-button" class="icon-button" data-i18n-key="sendButtonLabel" aria-label="Send message">
+                     <!-- Send Icon (Feather Icons - modified arrow) -->
+                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+<!-- Area for displaying error messages -->
+                 </button>
+            </div>
+        </div>
+
+<!-- External Libraries -->
+    <!-- marked.js: For rendering Markdown in AI responses -->
+    <!-- Local Scripts -->
+    <!-- script.js: Main application logic -->
+        <div id="error-notification" style="display: none;">
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

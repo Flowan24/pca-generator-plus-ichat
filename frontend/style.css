@@ -1,0 +1,570 @@
+/* File: style.css - iChat App Frontend
+ * Description: Stylesheet for the chat application interface.
+ * Defines the layout, colors, typography, and responsiveness.
+ */
+
+/* --- Global Styles & Variables --- */
+/* Define CSS custom properties (variables) for consistent theming */
+/* --- Global Styles --- */
+:root {
+    --bg-color: #f8f9fa; /* Off-white background */
+    --app-bg: #ffffff; /* White app container */
+    --text-color: #343a40; /* Dark gray text */
+    --border-color: #dee2e6; /* Light gray border */
+    --input-border: #ced4da; /* Slightly darker input border */
+    --accent-color: #007bff; /* Soft blue */
+    --accent-hover: #0056b3; /* Darker blue on hover */
+    --user-msg-bg: #e7f5ff; /* Light blue user message */
+    --ai-msg-bg: #ffffff; /* White AI message */
+    --secondary-text: #6c757d; /* Gray for secondary info */
+    --danger-color: #dc3545; /* Red for logout/errors */
+    --danger-hover: #c82333;
+    --code-bg: #e9ecef; /* Background for code blocks */
+}
+/* Basic body styling: font, background, centering content */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center app vertically */
+    padding: 20px; /* Add padding around the app */
+    box-sizing: border-box;
+    font-size: 16px; /* Base font size */
+    line-height: 1.5;
+}
+/* Main application container: background, border, shadow, dimensions, layout */
+
+#app {
+    background-color: var(--app-bg);
+    border-radius: 12px; /* Slightly larger radius */
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08); /* Softer shadow */
+    width: 100%; /* Use full width within padding */
+    max-width: 850px; /* Slightly wider max */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 40px); /* Fill available height */
+    max-height: 900px; /* Optional max height */
+    overflow: hidden; /* Prevent content spilling */
+    border: 1px solid var(--border-color); /* Subtle border */
+/* --- Initial Login Screen --- */
+/* Styles for the login form container, heading, form elements */
+}
+
+/* --- Initial Screen --- */
+#initial-screen {
+    padding: 40px;
+    text-align: center;
+}
+
+#initial-screen h1 {
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+#user-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#user-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--secondary-text);
+    font-weight: 500;
+    text-align: left;
+}
+
+#user-form input[type="text"],
+#user-form input[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+#user-form input[type="text"]:focus,
+#user-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+#user-form button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+/* --- Main Chat Screen --- */
+/* Styles for the overall chat interface layout */
+#user-form button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* --- Chat Screen --- */
+#chat-screen {
+    display: flex;
+    flex-direction: column;
+/* --- Chat Header --- */
+/* Styles for the header bar: layout, padding, border */
+    flex-grow: 1; /* Allow chat screen to grow */
+    height: 100%;
+    min-height: 0; /* Needed for flexbox scrolling */
+    background-color: var(--app-bg);
+}
+
+/* --- Chat Header --- */
+#chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px; /* Increased padding */
+    background-color: var(--app-bg); /* Match app background */
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#chat-header h2 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+}
+
+#user-info {
+    font-size: 0.8em;
+    color: var(--secondary-text);
+/* --- Language Switcher Styles --- */
+/* Styles specific to the language selection buttons in the header */
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between header buttons */
+}
+
+/* --- Language Switcher Styles --- */
+.header-right .language-switcher {
+    display: flex;
+    align-items: center;
+    margin-right: 6px; /* Add some space from logout button */
+}
+
+.header-right .language-switcher .lang-button {
+    background-color: transparent;
+    color: var(--secondary-text);
+    border: none;
+    padding: 0;
+    font-size: 11px; /* Even smaller, fixed size */
+    font-weight: 500;
+    min-width: auto;
+    width: 24px; /* Fixed width */
+    height: 24px; /* Fixed height */
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-transform: uppercase; /* Make text uppercase */
+    letter-spacing: 0.5px; /* Add slight letter spacing */
+}
+
+/* Hover for inactive button */
+.header-right .language-switcher .lang-button:hover:not(:disabled):not(.active-lang) {
+    color: var(--text-color);
+}
+
+/* Style for the currently active language button */
+.header-right .language-switcher .lang-button.active-lang {
+    color: var(--accent-color);
+    font-weight: 600;
+/* --- Generic Icon Button Style --- */
+/* Base style for icon buttons used in header and input area (upload, download, send, web search) */
+}
+
+/* Disable hover effect for the active button */
+.header-right .language-switcher .lang-button.active-lang:hover:not(:disabled) {
+    cursor: default;
+}
+/* --- End Language Switcher Styles --- */
+
+
+/* Generic Button Style for Header/Input */
+.icon-button {
+    background-color: transparent;
+    color: var(--secondary-text);
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.3em; /* Adjust icon size */
+    line-height: 1;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease; /* Added opacity transition */
+}
+
+.icon-button:hover:not(:disabled) { /* Don't apply hover when disabled */
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+/* Loading state for icon buttons */
+.icon-button.loading {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+#download-chat-button {
+    /* Inherits .icon-button */
+    font-size: 1.2em; /* Slightly smaller icon if needed */
+}
+
+#logout-button {
+    background-color: transparent;
+    color: var(--danger-color);
+    border: 1px solid transparent; /* Keep space */
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+/* --- Message Display Area --- */
+/* Styles for the container holding the chat messages: scrolling, padding, background */
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#logout-button:hover {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+/* --- Message Display Area --- */
+#message-display {
+    flex-grow: 1; /* Take remaining space */
+    overflow-y: auto;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between messages */
+    background-color: var(--app-bg); /* Match app background */
+}
+
+/* Scrollbar Styling */
+/* --- Message Bubbles --- */
+/* Base style for individual message bubbles */
+#message-display::-webkit-scrollbar {
+    width: 8px;
+}
+
+#message-display::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 4px;
+}
+
+#message-display::-webkit-scrollbar-track {
+    background-color: var(--bg-color); /* Match body background */
+/* Styles specific to user messages (alignment, background) */
+}
+
+/* --- Message Bubbles --- */
+.message {
+    position: relative; /* For copy button positioning */
+    width: fit-content;
+    max-width: 80%; /* Slightly wider max */
+    padding: 10px 15px; /* Adjusted padding */
+/* Styles specific to AI messages (alignment, background) */
+    border-radius: 18px; /* More rounded */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.45;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); /* Softer shadow */
+    clear: both;
+}
+
+/* Styles for preformatted text (code blocks) within messages */
+.user-message {
+    background-color: var(--user-msg-bg);
+    color: var(--text-color); /* Dark text on light blue */
+    margin-left: auto;
+    margin-right: 0;
+    border-bottom-right-radius: 6px; /* Consistent corner */
+    border: 1px solid #ccebff; /* Subtle border */
+}
+
+.ai-message {
+    background-color: var(--ai-msg-bg);
+    color: var(--text-color);
+    margin-right: auto;
+    margin-left: 0;
+/* Styles for the copy-to-clipboard button on AI messages */
+/* Positioned absolutely, appears on hover */
+    border-bottom-left-radius: 6px; /* Consistent corner */
+    border: 1px solid var(--border-color); /* Subtle border */
+}
+
+/* Code Blocks within Messages */
+.message pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 8px 0;
+    padding: 10px 12px;
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    font-size: 0.9em;
+    border: 1px solid var(--border-color);
+}
+
+/* Copy Button Styling */
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 4px;
+/* --- Message Input Area --- */
+/* Styles for the bottom bar containing input field and action buttons */
+    padding: 3px 6px;
+    font-size: 0.75em;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+/* Styles for the message textarea: flexible width, padding, border, auto-resizing */
+.message:hover .copy-button {
+    opacity: 1; /* Show on hover */
+}
+
+.copy-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.copy-button.copied {
+    background-color: var(--accent-color);
+}
+
+
+/* --- Message Input Area --- */
+#message-input {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px; /* Adjusted padding */
+    background-color: var(--app-bg); /* Match app background */
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent input area from shrinking */
+/* Styles for buttons within the message input area (using .icon-button base) */
+}
+
+#user-message { /* Renamed from #message-input input[type="text"] */
+    flex-grow: 1;
+    padding: 10px 18px; /* Adjusted padding */
+    border: 1px solid var(--input-border);
+    border-radius: 22px; /* More rounded */
+    margin: 0 10px; /* Margin around input */
+    font-size: 1em;
+    outline: none;
+    resize: none; /* Disable manual resizing */
+    min-height: 24px; /* Ensure minimum height */
+    line-height: 1.4;
+    overflow-y: auto; /* Show scrollbar when content exceeds max-height */
+    max-height: 120px; /* Limit the height (approx 5-6 lines) */
+    box-sizing: border-box; /* Include padding/border in height calculation */
+}
+
+#user-message:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+/* Input Area Buttons */
+.upload-button { /* Combined styles for the single upload button */
+    /* Inherits .icon-button */
+    margin-left: 0; /* Adjust margin */
+}
+
+#send-button {
+    /* Inherits .icon-button */
+    background-color: var(--accent-color);
+    color: white;
+    margin-right: 0; /* Adjust margin */
+}
+/* --- File Upload Animation --- */
+/* Pulsing animation applied to the upload button during upload */
+
+#send-button:hover {
+    background-color: var(--accent-hover);
+    color: white; /* Ensure color stays white */
+}
+
+#web-search-toggle {
+    /* Inherits .icon-button */
+    margin-left: 5px; /* Adjust spacing */
+/* --- Error Notification Bar --- */
+/* Styles for the notification bar that displays errors below the header */
+}
+
+#web-search-toggle.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+#web-search-toggle.active:hover {
+     background-color: var(--accent-hover);
+/* --- AI Typing Indicator --- */
+/* Styles for the "AI is typing..." indicator with animated dots */
+}
+
+/* Remove ::before pseudo-elements for icons, will add in HTML */
+/* #send-button::before { content: none; } */
+/* .upload-button::before { content: none; } */
+
+/* File upload animation */
+.uploading .upload-button {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- Error Notification --- */
+#error-notification {
+    background-color: #fff3cd; /* Light yellow */
+    color: #856404; /* Dark yellow text */
+    padding: 12px 20px;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    margin: 15px 25px 0; /* Position below header */
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* --- AI Typing Indicator --- */
+.ai-typing {
+    background-color: var(--ai-msg-bg);
+    color: var(--secondary-text);
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0; /* Align with message gap */
+    align-self: flex-start;
+/* --- Mobile Responsive Design --- */
+/* Adjustments for smaller screens (max-width: 600px) */
+    display: inline-flex; /* Use inline-flex */
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.ai-typing::after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: currentColor;
+    border-radius: 50%;
+    margin-left: 8px;
+    animation: typing-dots 1.4s infinite;
+    box-shadow: 10px 0 0 currentColor, 20px 0 0 currentColor; /* Create 3 dots */
+}
+
+@keyframes typing-dots {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+
+/* --- Mobile Responsive --- */
+@media (max-width: 600px) { /* Adjusted breakpoint */
+    body {
+        padding: 0;
+    }
+
+    #app {
+        width: 100%;
+        height: 100vh; /* Full viewport height */
+        max-height: none; /* Remove max height */
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    #initial-screen {
+        padding: 30px 20px;
+    }
+
+    #chat-header {
+        padding: 12px 15px;
+    }
+
+    .header-right {
+        gap: 10px;
+    }
+
+    #message-display {
+        padding: 15px;
+    }
+
+    .message {
+        max-width: 88%; /* Slightly more width */
+        padding: 8px 12px;
+    }
+
+    #message-input {
+        padding: 10px 12px;
+    }
+
+    #user-message {
+        padding: 8px 15px;
+        margin: 0 8px;
+    }
+
+    .icon-button {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2em;
+    }
+}
