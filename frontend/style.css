@@ -45,7 +45,7 @@ body {
     border-radius: 12px; /* Slightly larger radius */
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08); /* Softer shadow */
     width: 100%; /* Use full width within padding */
-    max-width: 850px; /* Slightly wider max */
+    max-width: 1200px; /* Increased from 850px for better horizontal usage */
     display: flex;
     flex-direction: column;
     height: calc(100vh - 40px); /* Fill available height */
@@ -272,10 +272,10 @@ body {
 #message-display {
     flex-grow: 1; /* Take remaining space */
     overflow-y: auto;
-    padding: 25px;
+    padding: 18px; /* Reduced from 25px */
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Space between messages */
+    gap: 8px; /* Reduced from 12px - Space between messages */
     background-color: var(--app-bg); /* Match app background */
 }
 
@@ -300,13 +300,13 @@ body {
 .message {
     position: relative; /* For copy button positioning */
     width: fit-content;
-    max-width: 80%; /* Slightly wider max */
-    padding: 10px 15px; /* Adjusted padding */
+    max-width: 85%; /* Increased horizontal space usage for better efficiency */
+    padding: 8px 12px; /* Reduced from 10px 15px */
 /* Styles specific to AI messages (alignment, background) */
     border-radius: 18px; /* More rounded */
     word-wrap: break-word;
     white-space: pre-wrap;
-    line-height: 1.45;
+    line-height: 1.3; /* Reduced from 1.45 */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); /* Softer shadow */
     clear: both;
 }
@@ -344,6 +344,70 @@ body {
     border-radius: 6px;
     font-size: 0.9em;
     border: 1px solid var(--border-color);
+}
+
+/* List Styles within Messages - Override marked.js defaults with higher specificity */
+.message ul,
+.message ol {
+    margin: 1px 0 !important; /* Force override of marked.js defaults */
+    padding-left: 16px !important; /* Reduced padding with !important */
+    margin-block-start: 1px !important; /* Override browser defaults */
+    margin-block-end: 1px !important; /* Override browser defaults */
+}
+
+.message li {
+    margin: 0 !important; /* Remove all margins from list items */
+    margin-bottom: 1px !important; /* Minimal spacing between items */
+    line-height: 1.15 !important; /* Very tight line height */
+    padding: 0 !important; /* Remove any padding */
+}
+
+/* Target nested lists more specifically */
+.message ul ul,
+.message ol ol,
+.message ul ol,
+.message ol ul {
+    margin: 0 !important; /* No margin for nested lists */
+    margin-top: 1px !important; /* Minimal top margin only */
+    padding-left: 12px !important; /* Reduced indent for nested lists */
+}
+
+/* Paragraph spacing within messages - force override */
+.message p {
+    margin: 1px 0 !important; /* Minimal spacing with force override */
+    margin-block-start: 1px !important; /* Override browser defaults */
+    margin-block-end: 1px !important; /* Override browser defaults */
+}
+
+/* Special handling for paragraphs adjacent to lists - force override */
+.message p + ul,
+.message p + ol {
+    margin-top: 0 !important; /* No space between paragraph and following list */
+}
+
+.message ul + p,
+.message ol + p {
+    margin-top: 0 !important; /* No space between list and following paragraph */
+}
+
+/* Additional override for marked.js generated content */
+.ai-message ul,
+.ai-message ol {
+    margin-top: 0 !important;
+    margin-bottom: 2px !important;
+}
+
+.ai-message li {
+    margin-top: 0 !important;
+    margin-bottom: 1px !important;
+}
+
+.message p:first-child {
+    margin-top: 0;
+}
+
+.message p:last-child {
+    margin-bottom: 0;
 }
 
 /* Copy Button Styling */
@@ -516,6 +580,13 @@ body {
   }
 }
 
+
+/* --- Large Screen Responsive --- */
+@media (min-width: 1024px) {
+    .message {
+        max-width: 75%; /* Increased for maximum horizontal space efficiency */
+    }
+}
 
 /* --- Mobile Responsive --- */
 @media (max-width: 600px) { /* Adjusted breakpoint */

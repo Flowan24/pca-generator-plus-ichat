@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const MAX_RETRIES = 3;
         const RETRY_DELAY = 1000; // milliseconds
         // Use relative URLs for API endpoints to work with any server configuration
-        const API_ENDPOINT = '/api/chat'; // Backend API endpoint
-        const UPLOAD_ENDPOINT = '/api/upload'; // File upload endpoint
-        const HISTORY_ENDPOINT = '/api/conversation/history';
+        const API_ENDPOINT = '/ichat/api/chat'; // Backend API endpoint
+        const UPLOAD_ENDPOINT = '/ichat/api/upload'; // File upload endpoint
+        const HISTORY_ENDPOINT = '/ichat/api/conversation/history';
         
         // --- Translations ---
         const translations = {
@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Language switcher titles
                 switchToEnglish: "Switch to English",
                 switchToGerman: "Auf Deutsch wechseln",
+                switchToSpanish: "Cambiar a Español",
             },
             de: {
                 loginTitle: "iChat",
@@ -119,38 +120,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 errorLoginGeneric: "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
                 errorSendGeneric: "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
                 errorFetchHistory: "Chatverlauf konnte nicht abgerufen werden.",
-    /** @type {string} The currently active language code (e.g., 'en', 'de'). */
                 uploadSuccess: "{filename} erfolgreich hochgeladen", // Used in displayMessage potentially
                 uploadProcessing: "Verarbeite {filename}...", // Not currently used, but good to have
-    /**
-         * @typedef {object | null} DocumentContext
-         * @property {string} filename - The original filename of the uploaded document.
-         * @property {string} documentId - The unique ID assigned to the document by the backend.
-         */
-        /** @type {DocumentContext} Stores context about the most recently uploaded document for follow-up questions. Null if no document context is active. */
-        /** @type {boolean} Tracks whether the web search feature is enabled for the *next* message. */
-        /** @type {string} Stores the logged-in user's name. Fetched from sessionStorage. */
-        /** @type {string} Stores the logged-in user's email. Fetched from sessionStorage. */
-    /**
-         * Sets the current language for the UI, stores it in localStorage, and applies translations.
-         * @param {string} lang - The language code to set (e.g., 'en', 'de').
-         */
-        /** @type {boolean} Flag indicating if the next message sent will be the first one in the session. */
                 uploadMessageUser: "{icon} Hochgeladen: {filename}", // For user message display
                 uploadFollowupPlaceholder: "Stellen Sie eine Frage zu {filename}...", // Placeholder after upload
                 errorGeneric: "Ein Fehler ist aufgetreten: {message}", // Generic error display
                 errorRetry: "Verbindung fehlgeschlagen. Wiederhole... ({count}/{max})", // Retry message
                 errorStreaming: "[Fehler während des Streamings]", // Append to message on stream error
                 errorNoResponse: "[Keine Antwort von KI erhalten]", // If stream ends with no data
-    /**
-         * Applies the translations for the currently set language (`currentLanguage`)
-         * to all elements with the `data-i18n-key` attribute.
-         * Also updates dynamic elements like titles, user info, and placeholders.
-         */
                 errorClipboard: "Kopieren in die Zwischenablage fehlgeschlagen.",
                 // Language switcher titles
                 switchToEnglish: "Switch to English",
                 switchToGerman: "Auf Deutsch wechseln",
+                switchToSpanish: "Cambiar a Español",
+            },
+            es: {
+                loginTitle: "iChat",
+                nameLabel: "Nombre:",
+                emailLabel: "Correo electrónico:",
+                startChatButton: "Iniciar Chat",
+                chatTitle: "iChat",
+                userInfo: "Conectado como: {userName} ({userEmail})",
+                downloadButtonTitle: "Descargar Historial de Chat",
+                logoutButton: "Cerrar Sesión",
+                uploadButtonTitle: "Subir Archivo (TXT, PDF, DOC, DOCX, PNG, JPG, JPEG)",
+                webSearchButtonTitle: "Alternar Búsqueda Web (Siguiente Mensaje)",
+                webSearchActiveTitle: "Búsqueda Web ACTIVADA (Siguiente Mensaje)",
+                messagePlaceholder: "Escribe tu mensaje...",
+                sendButtonLabel: "Enviar mensaje",
+                aiTyping: "IA está escribiendo",
+                copyButton: "Copiar",
+                copyButtonCopied: "¡Copiado!",
+                errorNoHistory: "No se encontró historial de conversación para descargar.",
+                errorUserNotFound: "No se puede descargar historial: Correo de usuario no encontrado.",
+                errorUploadSize: `El archivo excede el límite de ${MAX_FILE_SIZE / 1024 / 1024}MB.`, // Use constant
+                errorUploadType: `Tipo de archivo inválido. Tipos permitidos: ${ALLOWED_FILE_TYPES.join(', ')}`, // Use constant
+                errorUploadGeneral: "Error al subir archivo.",
+                errorLoginGeneric: "Error de inicio de sesión. Por favor intenta de nuevo.",
+                errorSendGeneric: "Error al enviar mensaje. Por favor intenta de nuevo.",
+                errorFetchHistory: "Error al obtener historial de chat.",
+                uploadSuccess: "{filename} subido exitosamente", // Used in displayMessage potentially
+                uploadProcessing: "Procesando {filename}...", // Not currently used, but good to have
+                uploadMessageUser: "{icon} Subido: {filename}", // For user message display
+                uploadFollowupPlaceholder: "Haz una pregunta sobre {filename}...", // Placeholder after upload
+                errorGeneric: "Ocurrió un error: {message}", // Generic error display
+                errorRetry: "Conexión fallida. Reintentando... ({count}/{max})", // Retry message
+                errorStreaming: "[Error durante la transmisión]", // Append to message on stream error
+                errorNoResponse: "[No se recibió respuesta de la IA]", // If stream ends with no data
+                errorClipboard: "Error al copiar al portapapeles.",
+                // Language switcher titles
+                switchToEnglish: "Switch to English",
+                switchToGerman: "Auf Deutsch wechseln",
+                switchToSpanish: "Cambiar a Español",
             }
         };
         let currentLanguage = 'en'; // Default language
@@ -288,6 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update language switcher titles and active state
             const langEnButton = document.getElementById('lang-en');
             const langDeButton = document.getElementById('lang-de');
+            const langEsButton = document.getElementById('lang-es');
             if (langEnButton) {
                 langEnButton.title = langTranslations['switchToEnglish'] || 'Switch to English';
                 langEnButton.classList.toggle('active-lang', currentLanguage === 'en'); // Add active class toggle
@@ -295,6 +317,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (langDeButton) {
                 langDeButton.title = langTranslations['switchToGerman'] || 'Auf Deutsch wechseln';
                 langDeButton.classList.toggle('active-lang', currentLanguage === 'de'); // Add active class toggle
+            }
+            if (langEsButton) {
+                langEsButton.title = langTranslations['switchToSpanish'] || 'Cambiar a Español';
+                langEsButton.classList.toggle('active-lang', currentLanguage === 'es'); // Add active class toggle
             }
         }
     
@@ -947,15 +973,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
         // --- Language Switcher Logic ---
-        // Add event listeners for language buttons (assuming IDs lang-en, lang-de)
+        // Add event listeners for language buttons (assuming IDs lang-en, lang-de, lang-es)
         const langEnButton = document.getElementById('lang-en');
         const langDeButton = document.getElementById('lang-de');
-    
+        const langEsButton = document.getElementById('lang-es');
+
         if (langEnButton) {
             langEnButton.addEventListener('click', () => setLanguage('en'));
         }
         if (langDeButton) {
             langDeButton.addEventListener('click', () => setLanguage('de'));
+        }
+        if (langEsButton) {
+            langEsButton.addEventListener('click', () => setLanguage('es'));
         }
     
         // --- Logout Logic ---
@@ -1062,4 +1092,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
     });
-    

@@ -58,7 +58,7 @@ app.config['MAX_CONTENT_LENGTH'] = None  # max file size, e.g., for 5MB write 5 
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
-    default_limits=["1000000 per day", "100 per minute"],
+    default_limits=["10000000 per day", "100000 per minute"],
     storage_uri="memory://"
 )
 
@@ -350,8 +350,8 @@ def get_llm_instance(streaming: bool = False):
     # Input token limits are usually separate and handled by the API/model itself.
     max_output_tokens = None # 16000 if not streaming else 1000 # Adjusted non-streaming limit
 
-    # Set the desired model name
-    model_name = "gpt-4.1-mini"
+    # Set the desired model name / Without this, the chat will not work
+    model_name = "gpt-4.1"  ########## *******Comment this to disable the app*******
     logging.info(f"Using model: {model_name}")
 
     return ChatOpenAI(
@@ -385,7 +385,7 @@ def get_conversation_chain(user_email: str, conversation_id: int):
     return conversation_memories[memory_key]
 # --- API Endpoints ---
 @app.route('/api/chat', methods=['POST'])
-@limiter.limit("10 per minute")  # Rate limit per user
+@limiter.limit("100000 per minute")  # Rate limit per user
 def chat_endpoint():
     data = request.json
     if not data:
@@ -687,7 +687,7 @@ def chat_endpoint():
             db.close()
 
 @app.route('/api/upload', methods=['POST'])
-@limiter.limit("5 per minute")  # Stricter rate limit for file uploads
+@limiter.limit("50000 per minute")  # Stricter rate limit for file uploads
 def upload_file():
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
@@ -854,7 +854,7 @@ def upload_file():
 
 # --- New Endpoint for Conversation History ---
 @app.route('/api/conversation/history', methods=['GET'])
-@limiter.limit("10 per minute") # Apply rate limiting
+@limiter.limit("100000 per minute") # Apply rate limiting
 def get_conversation_history():
     user_email = request.args.get('email')
     if not user_email:
