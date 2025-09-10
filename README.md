@@ -281,10 +281,9 @@ cd /home/yourusername/iChat
 git pull
 sudo pkill -HUP -f "gunicorn.*app:app"
 ```
-
-Distributed under the MIT license
-
 2. **Full Restart** (if needed):
 ```bash
 sudo systemctl restart ichat.service
 ```
+
+***Distributed under the MIT license***
