@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
          *              mapping translation keys (e.g., 'loginTitle') to translated strings.
          */
         /** @type {Translations} */
-        const MAX_MESSAGE_LENGTH = 1000;
+        const MAX_MESSAGE_LENGTH = 10000;
         const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
         const ALLOWED_FILE_TYPES = ['.txt', '.pdf', '.doc', '.docx', '.png', '.jpg', '.jpeg'];
         const MAX_RETRIES = 3;
@@ -53,7 +53,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const API_ENDPOINT = '/ichat/api/chat'; // Backend API endpoint
         const UPLOAD_ENDPOINT = '/ichat/api/upload'; // File upload endpoint
         const HISTORY_ENDPOINT = '/ichat/api/conversation/history';
-        
+
+        // --- Shared Helpers ---
+        /** Render markdown with DOMPurify sanitization. */
+        function renderMarkdown(text) {
+            const raw = marked.parse(text, { gfm: true, breaks: true });
+            return DOMPurify.sanitize(raw);
+        }
+
+        /** Create a copy button for AI messages. */
+        function createCopyButton(getTextFn) {
+            const langTranslations = translations[currentLanguage] || translations.en;
+            const btn = document.createElement('button');
+            btn.className = 'copy-button';
+            btn.title = langTranslations.copyButton || 'Copy to clipboard';
+            btn.textContent = langTranslations.copyButton || 'Copy';
+            btn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(getTextFn());
+                    btn.classList.add('copied');
+                    btn.textContent = langTranslations.copyButtonCopied || 'Copied!';
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.textContent = langTranslations.copyButton || 'Copy';
+                        btn.title = langTranslations.copyButton || 'Copy to clipboard';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                    showError('errorClipboard');
+                }
+            });
+            return btn;
+        }
+
+        /** Extract just the message text from an AI message element (excluding the copy button text). */
+        function getMessageText(element) {
+            const clone = element.cloneNode(true);
+            const btn = clone.querySelector('.copy-button');
+            if (btn) btn.remove();
+            return clone.textContent.trim();
+        }
+
         // --- Translations ---
         const translations = {
             en: {
@@ -691,41 +731,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const langTranslations = translations[currentLanguage] || translations.en;
     
             // Handle multiline text and code blocks
-            if (type === 'ai-message' || type === 'ai-message error') { // Apply to error messages too if needed
-                // Add copy button for AI messages
-                const copyButton = document.createElement('button');
-                copyButton.className = 'copy-button';
-                copyButton.title = langTranslations.copyButton || 'Copy to clipboard'; // Use translated title
-                copyButton.textContent = langTranslations.copyButton || 'Copy'; // Use translated text
-    
-                // Use a closure to capture the current text content for the copy action
+            if (type === 'ai-message' || type === 'ai-message error') {
                 const textToCopy = text;
-    
-                copyButton.addEventListener('click', async () => {
-                    try {
-                        await navigator.clipboard.writeText(textToCopy); // Use captured text
-                        copyButton.classList.add('copied');
-                        copyButton.textContent = langTranslations.copyButtonCopied || 'Copied!';
-                        setTimeout(() => {
-                            copyButton.classList.remove('copied');
-                            copyButton.textContent = langTranslations.copyButton || 'Copy';
-                            // Reset title on timeout as well
-                            copyButton.title = langTranslations.copyButton || 'Copy to clipboard';
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Failed to copy:', err);
-                        showError('errorClipboard'); // Use translated error key
-                    }
-                });
-    
-                // Parse markdown for AI messages
-                messageElement.innerHTML = marked.parse(text, {
-                    gfm: true, // GitHub Flavored Markdown
-                    breaks: true, // Convert line breaks to <br>
-                    sanitize: true // Sanitize HTML input
-                });
-    
-                messageElement.appendChild(copyButton);
+                messageElement.innerHTML = renderMarkdown(text);
+                messageElement.appendChild(createCopyButton(() => textToCopy));
             } else {
                 // For user messages, just display the text with basic line breaks
                 messageElement.textContent = text;
@@ -830,46 +839,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
                     // Only update innerHTML if the element has been appended
                     if (messageAppended) {
-                        // Parse the accumulated response with markdown
-                        aiMessageElement.innerHTML = marked.parse(currentAIResponse, {
-                            gfm: true, // GitHub Flavored Markdown
-                            breaks: true, // Convert line breaks to <br>
-                            sanitize: true // Sanitize HTML input
-                        });
-    
-                        // Add/Update copy button to streaming message
+                        aiMessageElement.innerHTML = renderMarkdown(currentAIResponse);
+
+                        // Add copy button once
                         let copyButton = aiMessageElement.querySelector('.copy-button');
                         if (!copyButton) {
-                            copyButton = document.createElement('button');
-                            copyButton.className = 'copy-button';
+                            copyButton = createCopyButton(() => getMessageText(aiMessageElement));
                             aiMessageElement.appendChild(copyButton);
-    
-                            // Add event listener only once when the button is created
-                            copyButton.addEventListener('click', async () => {
-                                // Get the text content *at the time of click*
-                                const finalResponseToCopy = aiMessageElement.textContent.replace(/Copy$|Copied!$/, '').trim(); // Attempt to get text excluding button text
-                                try {
-                                    await navigator.clipboard.writeText(finalResponseToCopy);
-                                    copyButton.classList.add('copied');
-                                    copyButton.textContent = langTranslations.copyButtonCopied || 'Copied!';
-                                    setTimeout(() => {
-                                        copyButton.classList.remove('copied');
-                                        copyButton.textContent = langTranslations.copyButton || 'Copy';
-                                        copyButton.title = langTranslations.copyButton || 'Copy to clipboard';
-                                    }, 2000);
-                                } catch (err) {
-                                    console.error('Failed to copy:', err);
-                                    showError('errorClipboard');
-                                }
-                            });
                         }
-                        // Update button text/title on each chunk (in case language changes mid-stream?)
-                        copyButton.title = langTranslations.copyButton || 'Copy to clipboard';
-                        if (!copyButton.classList.contains('copied')) {
-                            copyButton.textContent = langTranslations.copyButton || 'Copy';
-                        }
-    
-                        // Scroll only if the element is actually in the DOM
+
                         messageDisplay.scrollTop = messageDisplay.scrollHeight;
                     }
                 }
@@ -895,29 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
                      messageDisplay.appendChild(aiMessageElement);
                      messageDisplay.scrollTop = messageDisplay.scrollHeight;
                 } else if (messageAppended && !aiMessageElement.querySelector('.copy-button')) {
-                     // Ensure copy button exists even if stream ends quickly
-                     let copyButton = document.createElement('button');
-                     copyButton.className = 'copy-button';
-                     copyButton.title = langTranslations.copyButton || 'Copy to clipboard';
-                     copyButton.textContent = langTranslations.copyButton || 'Copy';
-                     aiMessageElement.appendChild(copyButton);
-                     // Add listener for the final button state
-                     copyButton.addEventListener('click', async () => {
-                         const finalResponseToCopy = aiMessageElement.textContent.replace(/Copy$|Copied!$/, '').trim();
-                         try {
-                             await navigator.clipboard.writeText(finalResponseToCopy);
-                             copyButton.classList.add('copied');
-                             copyButton.textContent = langTranslations.copyButtonCopied || 'Copied!';
-                             setTimeout(() => {
-                                 copyButton.classList.remove('copied');
-                                 copyButton.textContent = langTranslations.copyButton || 'Copy';
-                                 copyButton.title = langTranslations.copyButton || 'Copy to clipboard';
-                             }, 2000);
-                         } catch (err) {
-                             console.error('Failed to copy:', err);
-                             showError('errorClipboard');
-                         }
-                     });
+                     aiMessageElement.appendChild(createCopyButton(() => getMessageText(aiMessageElement)));
                 }
     
     

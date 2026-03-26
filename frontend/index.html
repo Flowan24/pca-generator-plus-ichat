@@ -78,7 +78,7 @@
                     data-i18n-key="messagePlaceholder"
                     placeholder="Type your message..."
                     aria-label="Message input"
-                    maxlength="1000"
+                    maxlength="10000"
                     rows="1"></textarea>
 
                  <!-- Send Button -->
@@ -99,7 +99,12 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+            integrity="sha384-948ahk4ZmxYVYOc+rxN1H2gM1EJ2Duhp7uHtZ4WSLkV4Vtx5MUqnV+l7u9B+jFv+"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"
+            integrity="sha384-pcBjnGbkyKeOXaoFkmJiuR9E08/6gkmus6/Strimnxtl3uk0Hx23v345pWyC/MMr"
+            crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 </html>

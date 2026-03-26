@@ -1,32 +1,34 @@
 # Core Framework Dependencies
-Flask>=2.0.1            # Web framework
-Flask-Cors>=4.0.0       # Handle Cross-Origin Resource Sharing
-Flask-Limiter>=3.5.0    # Rate limiting for API endpoints
-gunicorn>=21.0.0        # Production-grade WSGI server
+Flask>=3.1.3                    # Web framework
+Flask-Cors>=6.0.2               # Handle Cross-Origin Resource Sharing
+Flask-Limiter>=4.1.1            # Rate limiting for API endpoints
+gunicorn>=25.2.0                # Production-grade WSGI server
 
-# Database and Data Validation
-SQLAlchemy>=2.0.0       # SQL toolkit and ORM
-pydantic>=2.0.0         # Data validation using Python type annotations
-email-validator>=2.1.0   # Email format validation
+# Database
+SQLAlchemy>=2.0.48              # SQL toolkit and ORM
+pydantic>=2.12.5                # Data validation using Python type annotations
 
 # AI and Language Processing
-langchain>=0.1.0        # Framework for LLM applications
-langchain-openai>=0.0.3 # OpenAI integration for LangChain
-langchain-community>=0.0.1 # Community-supported modules for LangChain
+langchain>=1.2.13               # Framework for LLM applications
+langchain-classic>=1.0.3        # Backward-compat memory module
+langchain-openai>=1.1.12        # OpenAI integration for LangChain
+langchain-community>=0.4.1      # Community-supported modules for LangChain
+langchain-core>=1.2.22          # Core abstractions
+langchain-text-splitters>=1.1.1  # Text splitting utilities
+openai>=2.30.0                  # OpenAI API client
 
 # File Processing and Upload Handling
-python-magic>=0.4.27    # File type detection
-unstructured>=0.10.30   # Document parsing and text extraction
-PyPDF2>=3.0.0          # PDF file processing
-python-docx>=0.8.11     # Microsoft Word document processing
-Pillow>=10.0.0         # Image processing library
+python-magic>=0.4.27            # File type detection
+unstructured>=0.21.5            # Document parsing and text extraction
+pypdf>=6.9.2                    # PDF file processing
+python-docx>=1.2.0              # Microsoft Word document processing
+Pillow>=12.1.1                  # Image processing library
 
-# Authentication and Security
-python-jose>=3.3.0      # JWT token handling and cryptographic operations
-python-dotenv>=1.0.0    # Environment variable management
+# Environment and Security
+python-dotenv>=1.2.2            # Environment variable management
 
 # OCR Dependencies
-pytesseract>=0.3.10     # Python wrapper for Google's Tesseract-OCR Engine
+pytesseract>=0.3.13             # Python wrapper for Google's Tesseract-OCR Engine
 
 # System Requirements for OCR
 # Before using OCR features, install tesseract-ocr on your system:

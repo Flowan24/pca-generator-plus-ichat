@@ -2,6 +2,23 @@
 
 A modern Flask-based chat application with multilingual support (English, German, Spanish) that uses OpenAI's API to provide conversational AI capabilities with document upload and web search features.
 
+## 📋 Version History
+
+### v0.2 (current)
+- **Modular backend**: Split monolithic `app.py` into `config.py`, `models.py`, `services.py`, `app.py`
+- **GPT-5.4 Mini**: Upgraded from GPT-4.1
+- **Pedagogy-focused system prompt**: AI acts as a professional learning designer and education expert
+- **Windowed conversation memory**: Sliding window (last 20 exchanges) prevents token overflow; rehydrated from DB on restart
+- **Security hardening**: CORS restricted to production domain, rate limiting, XSS protection via DOMPurify, security headers
+- **Unicode name support**: Accepts names in any script (Arabic, Chinese, Cyrillic, etc.)
+- **LRU memory cache**: Bounded at 200 conversations, prevents unbounded memory growth
+- **Package upgrades**: LangChain 1.x, OpenAI SDK 2.x, Flask 3.x
+- **Bug fixes**: DB session/streaming conflict, chat memory persistence across restarts
+
+### v0.1
+- Original monolithic application with single-file backend
+- GPT-4.1, no system prompt, unbounded memory, basic validation
+
 ## ✨ Features
 
 - **Trilingual Interface**: Full support for English, German, and Spanish with dynamic language switching
