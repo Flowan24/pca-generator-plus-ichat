@@ -1,4 +1,7 @@
-# iChat - Trilingual AI Chat Application
+# Pedagogical Conversational Agent (PCA) Generator Meets iChat a Trilingual AI Chat Application
+The aim of this project is to provide a simple interface to enbale teacher to built their own PCA with the help of an AI chatbot to use them in their class rooms. The interface allows teacher to describe PCA based on 6 identified dimension process: Domain Model, Learner Model, Tutor-Model, Feedback-Model, Educator-Model. After the teacher described these dimension they can download a PCA-file which they can further distrubted to their students to learn with the support of an PCA.
+
+## iChat - Trilingual AI Chat Application
 
 A modern Flask-based chat application with multilingual support (English, German, Spanish) that uses OpenAI's API to provide conversational AI capabilities with document upload and web search features.
 
@@ -86,14 +89,14 @@ Language switching is seamless and affects all UI elements, error messages, and 
 
 1. Clone the repository to your server:
 ```bash
-git clone https://github.com/gertipishtari/iChat.git /home/yourusername/iChat
+git clone https://github.com/Flowan24/pca-generator-plus-ichat /home/yourusername/iChat
 ```
 
 2. Create and activate a virtual environment:
 ```bash
 cd /home/yourusername/iChat/backend
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
@@ -223,7 +226,7 @@ For local development:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/gertipishtari/iChat.git
+git clone https://github.com/Flowan24/pca-generator-plus-ichat
 cd iChat
 ```
 

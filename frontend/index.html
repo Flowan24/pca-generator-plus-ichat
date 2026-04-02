@@ -14,20 +14,20 @@
 <!-- Main container for the entire application -->
 <!-- Initial screen shown on load for user login -->
     <div id="app">
+        <!-- Main chat interface, hidden initially -->
+        <!-- Header section containing title, user info, and controls -->
         <div id="initial-screen">
             <h1 data-i18n-key="loginTitle">iChat</h1>
             <form id="user-form">
-                <label for="name" data-i18n-key="nameLabel">Name:</label>
+                <span for="name" data-i18n-key="nameLabel">Name:</span>
                 <input type="text" id="name" name="name" required>
-                <label for="email" data-i18n-key="emailLabel">Email:</label>
+                <span for="email" data-i18n-key="emailLabel">Email:</span>
                 <input type="email" id="email" name="email" required>
                 <button type="submit" data-i18n-key="startChatButton">Start Chatting</button>
             </form>
-<!-- Main chat interface, hidden initially -->
-<!-- Header section containing title, user info, and controls -->
         </div>
-
-        <div id="chat-screen" style="display: none;">
+        <!-- Main application is a two column interface left tutor-generator, right chat -->
+        <div id="main-application" style="display: none;">
             <div id="chat-header">
                 <div class="header-left">
                     <h2 data-i18n-key="chatTitle">Chat</h2>
@@ -45,57 +45,162 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         <span class="loading-spinner"></span> <!-- Spinner for loading state -->
                     </button>
-<!-- Area where chat messages are displayed -->
+                    <!-- Area where chat messages are displayed -->
                     <button id="logout-button" data-i18n-key="logoutButton">Logout</button>
                 </div>
-<!-- Input area for typing messages, uploading files, and sending -->
             </div>
-            <div id="message-display">
-                <!-- Messages will be appended here -->
+            <div class="row">
+                <!-- Tutor-generator interface, 6 text boxes and a button generate a pedagogical tutor file -->
+                <div id="tutor-generator" class="column"> 
+                    <div class="input-group" id="tutor-goal">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="mainObjectiveLabel"> 
+                                Main Objective:
+                            </span>
+                             <button class="tutor-expand-button" id="tutor-goal-input-expand">v</button>
+                        </div>
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorGoalPlaceholder"
+                            aria-label="Overall Goal input"
+                            placeholder="What is the tutor's main goal?"
+                            rows="4"></textarea>
+                    </div>
+
+                    <div class="input-group" id="tutor-model-domain">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="domainModelLabel">
+                                Domain Model:
+                            </span>
+                            <button class="tutor-expand-button" id="tutor-model-domain-input-expand">v</button>
+                        </div>   
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorModelDomainPlaceholder"
+                            aria-label="Domain Model input"
+                            placeholder="What is the tutor's learning domain?"
+                            rows="4"></textarea>   
+                    </div>
+
+                    <div class="input-group" id="tutor-model-learner">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="learnerModelLabel">
+                                Learner Model:
+                            </span>
+                            <button class="tutor-expand-button" id="tutor-model-learner-input-expand">v</button>
+                        </div>
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorModelLearnerPlaceholder"
+                            aria-label="Learner Model input"
+                            placeholder="What is the profile or persona of the learners?"
+                            rows="4"></textarea> 
+                    </div>
+                    <div class="input-group" id="tutor-model-tutor">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="tutorModelLabel">
+                                Tutor Model:
+                            </span>
+                            <button class="tutor-expand-button" id="tutor-model-tutor-input-expand">v</button>
+                        </div>
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorModelTutorPlaceholder"
+                            aria-label="Tutor Model input"
+                            placeholder="From a pedagogical and didactic perspective, how should the tutor behave and adapt toward the learner?"
+                            rows="4"></textarea>   
+                    </div>
+
+                    <div class="input-group" id="tutor-model-feedback">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="feedbackModelLabel">
+                                Feedback Model:
+                            </span>
+                            <button class="tutor-expand-button" id="tutor-model-feedback-input-expand">v</button> 
+                        </div>
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorModelFeedbackPlaceholder"
+                            aria-label="Feedback Model input"
+                            placeholder="How should the tutor provide feedback to the learner?"
+                            rows="4"></textarea>  
+                       
+                    </div>  
+
+                    <div class="input-group"  id="tutor-model-educator">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="tutor-text-input-label" data-i18n-key="educatorModelLabel">
+                                Educator Model:
+                            </span>
+                            <button class="tutor-expand-button" id="tutor-model-educator-input-expand">v</button>
+                        </div>
+                        <textarea
+                            class="tutor-text-input"
+                            data-i18n-key="tutorModelEducatorPlaceholder"
+                            aria-label="Educator Model input"
+                            placeholder="As an educator, what do you need from the tutor in order to evaluate the tutor’s performance?"
+                            rows="4"></textarea>       
+                    </div>
+                    <div id="tutor-controls" class="container">
+                         <button id="tutor-button-download">Download Tutor</button>
+                        <button id="tutor-button-test">Test Tutor ></button>
+                    </div>
+                    
+                </div>
+
+                <div id="chat-screen">
+                   
+                    <!-- Input area for typing messages, uploading files, and sending -->
+
+                    <div id="message-display" style="height:stretch;">
+                        <!-- Messages will be appended here -->
+                    </div>
+                    <div id="message-input">
+                        <div style="display: flex; flex-direction: column;">
+                            <!-- Upload Button - uses label for input trigger -->
+                            <span for="file-upload" class="upload-button icon-button" data-i18n-key="uploadButtonTitle" title="Upload File" aria-label="Upload document or image">
+                                <!-- Paperclip Icon (Feather Icons) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                                <span class="loading-spinner"></span> <!-- Spinner for loading state -->
+                            </span>
+                            <input
+                                type="file"
+                                id="file-upload"
+                                accept=".txt,.pdf,.doc,.docx,.png,.jpg,.jpeg"
+                                style="display: none;">
+
+                            <!-- Web Search Toggle Button -->
+                            <button id="web-search-toggle" class="icon-button" data-i18n-key="webSearchButtonTitle" title="Toggle Web Search (Next Message)" aria-label="Toggle web search for next message">
+                                <!-- Globe Icon (Feather Icons) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            </button>
+                        </div>
+                        <!-- Message Text Input -->
+                        <textarea
+                            id="user-message"
+                            data-i18n-key="messagePlaceholder"
+                            placeholder="Type your message..."
+                            aria-label="Message input"
+                            maxlength="10000"
+                            rows="4"></textarea>
+
+                        <!-- Send Button -->
+                        <button id="send-button" class="icon-button" data-i18n-key="sendButtonLabel" aria-label="Send message">
+                            <!-- Send Icon (Feather Icons - modified arrow) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                    <!-- Area for displaying error messages -->
+                    <!-- External Libraries -->
+                    <!-- marked.js: For rendering Markdown in AI responses -->
+                    <!-- Local Scripts -->
+                    <!-- script.js: Main application logic -->
+                    <div id="error-notification" style="display: none;">
+                        <p id="error-message"></p>
+                    </div>
+                </div>
+
             </div>
-            <div id="message-input">
-                 <!-- Upload Button - uses label for input trigger -->
-                 <label for="file-upload" class="upload-button icon-button" data-i18n-key="uploadButtonTitle" title="Upload File" aria-label="Upload document or image">
-                     <!-- Paperclip Icon (Feather Icons) -->
-                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                     <span class="loading-spinner"></span> <!-- Spinner for loading state -->
-                 </label>
-                 <input
-                     type="file"
-                     id="file-upload"
-                     accept=".txt,.pdf,.doc,.docx,.png,.jpg,.jpeg"
-                      style="display: none;">
-
-                 <!-- Web Search Toggle Button -->
-                 <button id="web-search-toggle" class="icon-button" data-i18n-key="webSearchButtonTitle" title="Toggle Web Search (Next Message)" aria-label="Toggle web search for next message">
-                     <!-- Globe Icon (Feather Icons) -->
-                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                 </button>
-
-                 <!-- Message Text Input -->
-                 <textarea
-                    id="user-message"
-                    data-i18n-key="messagePlaceholder"
-                    placeholder="Type your message..."
-                    aria-label="Message input"
-                    maxlength="10000"
-                    rows="1"></textarea>
-
-                 <!-- Send Button -->
-                 <button id="send-button" class="icon-button" data-i18n-key="sendButtonLabel" aria-label="Send message">
-                     <!-- Send Icon (Feather Icons - modified arrow) -->
-                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-<!-- Area for displaying error messages -->
-                 </button>
-            </div>
-        </div>
-
-<!-- External Libraries -->
-    <!-- marked.js: For rendering Markdown in AI responses -->
-    <!-- Local Scripts -->
-    <!-- script.js: Main application logic -->
-        <div id="error-notification" style="display: none;">
-            <p id="error-message"></p>
         </div>
     </div>
 
@@ -105,6 +210,8 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"
             integrity="sha384-pcBjnGbkyKeOXaoFkmJiuR9E08/6gkmus6/Strimnxtl3uk0Hx23v345pWyC/MMr"
             crossorigin="anonymous"></script>
+    <script src="const.js"></script>
+    <script src="translation.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

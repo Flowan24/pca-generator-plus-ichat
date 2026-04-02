@@ -59,7 +59,7 @@ body {
 /* --- Initial Screen --- */
 #initial-screen {
     padding: 40px;
-    text-align: center;
+    text-align: left;
 }
 
 #initial-screen h1 {
@@ -128,6 +128,7 @@ body {
     height: 100%;
     min-height: 0; /* Needed for flexbox scrolling */
     background-color: var(--app-bg);
+    min-width: 50%;
 }
 
 /* --- Chat Header --- */
@@ -139,6 +140,7 @@ body {
     background-color: var(--app-bg); /* Match app background */
     border-bottom: 1px solid var(--border-color);
     flex-shrink: 0; /* Prevent header from shrinking */
+    max-height:10%; /* Optional max height for header */
 }
 
 .header-left {
@@ -277,6 +279,7 @@ body {
     flex-direction: column;
     gap: 8px; /* Reduced from 12px - Space between messages */
     background-color: var(--app-bg); /* Match app background */
+    max-height:640px;
 }
 
 /* Scrollbar Styling */
@@ -531,12 +534,13 @@ body {
 #error-notification {
     background-color: #fff3cd; /* Light yellow */
     color: #856404; /* Dark yellow text */
-    padding: 12px 20px;
+    padding: 12px;
     border: 1px solid #ffeeba;
     border-radius: 8px;
     margin: 15px 25px 0; /* Position below header */
     text-align: center;
     font-size: 0.9em;
+    height: 100px;
 }
 
 /* --- AI Typing Indicator --- */
@@ -638,4 +642,67 @@ body {
         height: 36px;
         font-size: 1.2em;
     }
+}
+
+.row {
+  display: flex;
+  height: 100%;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 10px;
+  overflow: auto;
+}
+
+.input-group {
+    flex: 1 1 calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.tutor-text-input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-height: 10px;
+    transition: border 0.2s, box-shadow 0.2s;
+    width: 95%;
+    overflow-y: scroll;
+    resize: none;
+    max-height: 690px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #0078ff;
+    box-shadow: 0 0 6px rgba(0,120,255,0.3);
+}
+
+.tutor-text-input-label {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: var(--secondary-text);
+    justify-content: space-between;
+}
+.tutor-expand-button {
+    width: 5%;
+    align-content: center;
+    padding: 0;
+}
+.container {
+    display: flex;
+    justify-content: space-between; /* pushes one element left, the other right */
+    width: 90%;
+}
+#tutor-controls {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px; /* Adjusted padding */
+    background-color: var(--app-bg); /* Match app background */
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevent input area from shrinking */
+/* Styles for buttons within the message input area (using .icon-button base) */
 }

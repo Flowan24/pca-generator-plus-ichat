@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // DOM Elements
         const userForm = document.getElementById('user-form');
         const initialScreen = document.getElementById('initial-screen');
-        const chatScreen = document.getElementById('chat-screen');
+        const appScreen = document.getElementById('main-application');
         const messageDisplay = document.getElementById('message-display');
         const messageInput = document.getElementById('user-message');
         const sendButton = document.getElementById('send-button');
@@ -44,16 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
          *              mapping translation keys (e.g., 'loginTitle') to translated strings.
          */
         /** @type {Translations} */
-        const MAX_MESSAGE_LENGTH = 10000;
-        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-        const ALLOWED_FILE_TYPES = ['.txt', '.pdf', '.doc', '.docx', '.png', '.jpg', '.jpeg'];
-        const MAX_RETRIES = 3;
-        const RETRY_DELAY = 1000; // milliseconds
-        // Use relative URLs for API endpoints to work with any server configuration
-        const API_ENDPOINT = '/ichat/api/chat'; // Backend API endpoint
-        const UPLOAD_ENDPOINT = '/ichat/api/upload'; // File upload endpoint
-        const HISTORY_ENDPOINT = '/ichat/api/conversation/history';
-
         // --- Shared Helpers ---
         /** Render markdown with DOMPurify sanitization. */
         function renderMarkdown(text) {
@@ -95,126 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- Translations ---
-        const translations = {
-            en: {
-                loginTitle: "iChat",
-                nameLabel: "Name:",
-                emailLabel: "Email:",
-                startChatButton: "Start Chatting",
-                chatTitle: "iChat",
-                userInfo: "Logged in as: {userName} ({userEmail})",
-                downloadButtonTitle: "Download Chat History",
-                logoutButton: "Logout",
-                uploadButtonTitle: "Upload File (TXT, PDF, DOC, DOCX, PNG, JPG, JPEG)",
-                webSearchButtonTitle: "Toggle Web Search (Next Message)",
-                webSearchActiveTitle: "Web Search ON (Next Message)",
-                messagePlaceholder: "Type your message...",
-                sendButtonLabel: "Send message",
-                aiTyping: "AI is typing",
-                copyButton: "Copy",
-                copyButtonCopied: "Copied!",
-                errorNoHistory: "No conversation history found to download.",
-                errorUserNotFound: "Cannot download history: User email not found.",
-                errorUploadSize: `File exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit.`, // Use constant
-                errorUploadType: `Invalid file type. Allowed types: ${ALLOWED_FILE_TYPES.join(', ')}`, // Use constant
-                errorUploadGeneral: "File upload failed.",
-                errorLoginGeneric: "Login failed. Please try again.",
-                errorSendGeneric: "Failed to send message. Please try again.",
-                errorFetchHistory: "Failed to fetch chat history.",
-                uploadSuccess: "Successfully uploaded {filename}", // Used in displayMessage potentially
-                uploadProcessing: "Processing {filename}...", // Not currently used, but good to have
-                uploadMessageUser: "{icon} Uploaded: {filename}", // For user message display
-                uploadFollowupPlaceholder: "Ask a question about {filename}...", // Placeholder after upload
-                errorGeneric: "An error occurred: {message}", // Generic error display
-                errorRetry: "Connection failed. Retrying... ({count}/{max})", // Retry message
-                errorStreaming: "[Error during streaming]", // Append to message on stream error
-                errorNoResponse: "[No response received from AI]", // If stream ends with no data
-                errorClipboard: "Failed to copy to clipboard.",
-                // Language switcher titles
-                switchToEnglish: "Switch to English",
-                switchToGerman: "Auf Deutsch wechseln",
-                switchToSpanish: "Cambiar a Español",
-            },
-            de: {
-                loginTitle: "iChat",
-                nameLabel: "Name:",
-                emailLabel: "E-Mail:",
-                startChatButton: "Chat starten",
-                chatTitle: "iChat",
-                userInfo: "Angemeldet als: {userName} ({userEmail})",
-                downloadButtonTitle: "Chatverlauf herunterladen",
-                logoutButton: "Abmelden",
-                uploadButtonTitle: "Datei hochladen (TXT, PDF, DOC, DOCX, PNG, JPG, JPEG)",
-                webSearchButtonTitle: "Websuche umschalten (Nächste Nachricht)",
-                webSearchActiveTitle: "Websuche EIN (Nächste Nachricht)",
-                messagePlaceholder: "Nachricht eingeben...",
-                sendButtonLabel: "Nachricht senden",
-                aiTyping: "KI schreibt",
-                copyButton: "Kopieren",
-                copyButtonCopied: "Kopiert!",
-                errorNoHistory: "Kein Chatverlauf zum Herunterladen gefunden.",
-                errorUserNotFound: "Verlauf kann nicht heruntergeladen werden: Benutzer-E-Mail nicht gefunden.",
-                errorUploadSize: `Datei überschreitet das Limit von ${MAX_FILE_SIZE / 1024 / 1024}MB.`, // Use constant
-                errorUploadType: `Ungültiger Dateityp. Erlaubt: ${ALLOWED_FILE_TYPES.join(', ')}`, // Use constant
-                errorUploadGeneral: "Datei-Upload fehlgeschlagen.",
-                errorLoginGeneric: "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
-                errorSendGeneric: "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
-                errorFetchHistory: "Chatverlauf konnte nicht abgerufen werden.",
-                uploadSuccess: "{filename} erfolgreich hochgeladen", // Used in displayMessage potentially
-                uploadProcessing: "Verarbeite {filename}...", // Not currently used, but good to have
-                uploadMessageUser: "{icon} Hochgeladen: {filename}", // For user message display
-                uploadFollowupPlaceholder: "Stellen Sie eine Frage zu {filename}...", // Placeholder after upload
-                errorGeneric: "Ein Fehler ist aufgetreten: {message}", // Generic error display
-                errorRetry: "Verbindung fehlgeschlagen. Wiederhole... ({count}/{max})", // Retry message
-                errorStreaming: "[Fehler während des Streamings]", // Append to message on stream error
-                errorNoResponse: "[Keine Antwort von KI erhalten]", // If stream ends with no data
-                errorClipboard: "Kopieren in die Zwischenablage fehlgeschlagen.",
-                // Language switcher titles
-                switchToEnglish: "Switch to English",
-                switchToGerman: "Auf Deutsch wechseln",
-                switchToSpanish: "Cambiar a Español",
-            },
-            es: {
-                loginTitle: "iChat",
-                nameLabel: "Nombre:",
-                emailLabel: "Correo electrónico:",
-                startChatButton: "Iniciar Chat",
-                chatTitle: "iChat",
-                userInfo: "Conectado como: {userName} ({userEmail})",
-                downloadButtonTitle: "Descargar Historial de Chat",
-                logoutButton: "Cerrar Sesión",
-                uploadButtonTitle: "Subir Archivo (TXT, PDF, DOC, DOCX, PNG, JPG, JPEG)",
-                webSearchButtonTitle: "Alternar Búsqueda Web (Siguiente Mensaje)",
-                webSearchActiveTitle: "Búsqueda Web ACTIVADA (Siguiente Mensaje)",
-                messagePlaceholder: "Escribe tu mensaje...",
-                sendButtonLabel: "Enviar mensaje",
-                aiTyping: "IA está escribiendo",
-                copyButton: "Copiar",
-                copyButtonCopied: "¡Copiado!",
-                errorNoHistory: "No se encontró historial de conversación para descargar.",
-                errorUserNotFound: "No se puede descargar historial: Correo de usuario no encontrado.",
-                errorUploadSize: `El archivo excede el límite de ${MAX_FILE_SIZE / 1024 / 1024}MB.`, // Use constant
-                errorUploadType: `Tipo de archivo inválido. Tipos permitidos: ${ALLOWED_FILE_TYPES.join(', ')}`, // Use constant
-                errorUploadGeneral: "Error al subir archivo.",
-                errorLoginGeneric: "Error de inicio de sesión. Por favor intenta de nuevo.",
-                errorSendGeneric: "Error al enviar mensaje. Por favor intenta de nuevo.",
-                errorFetchHistory: "Error al obtener historial de chat.",
-                uploadSuccess: "{filename} subido exitosamente", // Used in displayMessage potentially
-                uploadProcessing: "Procesando {filename}...", // Not currently used, but good to have
-                uploadMessageUser: "{icon} Subido: {filename}", // For user message display
-                uploadFollowupPlaceholder: "Haz una pregunta sobre {filename}...", // Placeholder after upload
-                errorGeneric: "Ocurrió un error: {message}", // Generic error display
-                errorRetry: "Conexión fallida. Reintentando... ({count}/{max})", // Retry message
-                errorStreaming: "[Error durante la transmisión]", // Append to message on stream error
-                errorNoResponse: "[No se recibió respuesta de la IA]", // If stream ends with no data
-                errorClipboard: "Error al copiar al portapapeles.",
-                // Language switcher titles
-                switchToEnglish: "Switch to English",
-                switchToGerman: "Auf Deutsch wechseln",
-                switchToSpanish: "Cambiar a Español",
-            }
-        };
-        let currentLanguage = 'en'; // Default language
+        const translations = getTranslationDictionary(); // call from translation.js see loading into global scope via index.html
+        let currentLanguage = DEFAULT_LANGUAGE; // Default language
     
         // Document context storage
         let currentDocumentContext = null;
@@ -537,17 +409,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if user is already logged in
         if (userName && userEmail) {
             // User info is available, set language and apply translations
-            setLanguage(preferredLanguage || 'en');
+            setLanguage(preferredLanguage || DEFAULT_LANGUAGE);
             // userInfoDisplay.textContent = `Logged in as: ${userName} (${userEmail})`; // Handled by applyTranslations -> updateUserInfoDisplay
             // updateUserInfoDisplay(); // Called by setLanguage -> applyTranslations
             initialScreen.style.display = 'none';
-            chatScreen.style.display = 'flex';
-            chatScreen.style.flexDirection = 'column';
+            appScreen.style.display = 'flex';
+            appScreen.style.flexDirection = 'column';
             messageDisplay.style.display = 'flex';
-            messageDisplay.style.flexDirection = 'column';
+            // messageDisplay.style.flexDirection = 'column';
         } else {
             // Not logged in, apply translations for the login screen
-            setLanguage(preferredLanguage || 'en');
+            setLanguage(preferredLanguage || DEFAULT_LANGUAGE);
             initialScreen.style.display = 'block'; // Ensure login screen is visible
     /**
          * Sends the user's message to the backend API.
@@ -556,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
          * resets document context if applicable, calls the `callChatAPI` function,
          * and updates the `isFirstMessage` flag.
          */
-            chatScreen.style.display = 'none';
+            appScreen.style.display = 'none';
         }
     
         // --- Initial Screen Logic ---
@@ -576,10 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyTranslations();
     
                 initialScreen.style.display = 'none';
-                chatScreen.style.display = 'flex';
-                chatScreen.style.flexDirection = 'column';
+                appScreen.style.display = 'flex';
+                appScreen.style.flexDirection = 'column';
                 messageDisplay.style.display = 'flex';
-                messageDisplay.style.flexDirection = 'column';
+                //messageDisplay.style.flexDirection = 'column';
                 messageInput.focus();
             } else {
                  // Optional: Show login error using translated key
@@ -960,8 +832,8 @@ document.addEventListener('DOMContentLoaded', () => {
             messageDisplay.innerHTML = '';
     
             // Switch back to initial screen and apply default language translations
-            setLanguage('en'); // Reset to default language
-            chatScreen.style.display = 'none';
+            setLanguage(DEFAULT_LANGUAGE); // Reset to default language
+            appScreen.style.display = 'none';
             initialScreen.style.display = 'block';
     
             // Clear input fields on login screen
@@ -972,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // --- Download Chat Logic ---
         downloadChatButton.addEventListener('click', async () => {
-            const langTranslations = translations[currentLanguage] || translations.en;
+            //const langTranslations = translations[currentLanguage] || translations.en;
             if (!userEmail) {
                 showError('errorUserNotFound'); // Use translated error key
                 return;
@@ -1046,5 +918,105 @@ document.addEventListener('DOMContentLoaded', () => {
                 // downloadChatButton.textContent = 'Download'; // REMOVED
             }
         });
+
+        // --- Tutor Logic ---
+               //---- Tutor Generator Input Logic --
+        const inputGorupsGoalInput = document.getElementById('tutor-goal');
+        const inputGorupsDomainInput = document.getElementById('tutor-model-domain');
+        const inputGorupsLearnerInput = document.getElementById('tutor-model-learner');
+        const inputGorupsTutorInput = document.getElementById('tutor-model-tutor');
+        const inputGorupsFeedbackInput = document.getElementById('tutor-model-feedback');
+        const inputGorupsEducatorInput = document.getElementById('tutor-model-educator');
+        const inputGorups = [inputGorupsGoalInput, inputGorupsDomainInput, inputGorupsLearnerInput, inputGorupsTutorInput, inputGorupsFeedbackInput, inputGorupsEducatorInput];  
+
+        for(const inputGroup of inputGorups ) {
+            const expandButton = inputGroup.getElementsByClassName('tutor-expand-button')[0];
+            expandButton.addEventListener('click', expandTextarea.bind(null, inputGroup));
+        }
+
+        function expandTextarea(inputGroup) {
+            const expandButton = inputGroup.getElementsByClassName('tutor-expand-button')[0];
+            const textarea = inputGroup.getElementsByClassName('tutor-text-input')[0];
+            
+            if(textarea.rows === 4) {
+                textarea.rows = 45;
+            } else {
+                textarea.rows = 4;
+            }
+
+            for(const inputGroup of inputGorups) {
+                const ta = inputGroup.getElementsByClassName('tutor-text-input')[0];
+                if(ta.rows === 4) {
+                    inputGroup.style.display = textarea.rows > 4 ? 'none' : 'flex'; // Hide other textareas if this one is expanded
+                }
+            }
+
+            expandButton.textContent = textarea.rows === 4 ? 'v' : '^'; // Change button text based on state
+               
+        }
+
+        const tutorButtonDownload = document.getElementById('tutor-button-download');
+        
+        tutorButtonDownload.addEventListener('click', async () => {
+            let userName = sessionStorage.getItem('userName') || '';
+            let userEmail = sessionStorage.getItem('userEmail') || '';
+
+            if (!userEmail) {
+                console.log("User Mail not found");
+                return;
+            }
+
+            console.log("Attempting to download chat history for:", userEmail);
     
+            // Add loading state visually without removing icon
+            tutorButtonDownload.disabled = true;
+    
+            try {
+                // Format the tutor file into a plain text string
+                let formattedTutor = `Tutor Information from ${userName} (${userEmail})\n`;
+                formattedTutor += `Generated on: ${new Date().toLocaleString()}\n\n`;
+                formattedTutor += generateTutor(); // Get the formatted tutor content from the function
+    
+                // Create a Blob and trigger download
+                const blob = new Blob([formattedTutor], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                // Create a filename with date/time
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+                link.download = `tutor_from_${userName}_${dateStr}_${timeStr}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url); // Clean up the object URL
+    
+                console.log("Tutor file download triggered.");
+            } catch (error) {
+                console.error("Error during tutor file download:", error);
+            } finally {
+                tutorButtonDownload.disabled = false;
+            }
+        });
+
+        const tutorButtonTest = document.getElementById('tutor-button-test');
+
+        tutorButtonTest.addEventListener('click', async () => { 
+            const tutorContent = generateTutor();
+            messageInput.value = tutorContent; // Set the generated tutor content as the message input value
+            sendMessage(); // Call the sendMessage function to send it to the chat
+        });
+
+        function generateTutor() {
+            let formattedTutor = "==============================\n\n";
+            inputGorups.forEach(group => {
+                    const label = group.getElementsByClassName('tutor-text-input-label')[0].textContent.trim();
+                    const textarea = group.getElementsByClassName('tutor-text-input')[0];
+                    const content = textarea.value.trim();
+                    formattedTutor += `${label}\n${content}\n\n`;
+                });
+                formattedTutor += `==============================\n`;
+                return formattedTutor;
+        }
     });
