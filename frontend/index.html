@@ -149,11 +149,14 @@
                 </div>
 
                 <div id="chat-screen">
-                   
+                    <!-- Area for displaying error messages -->
+                    <div id="error-notification" style="display: none;">
+                        <p id="error-message"></p>
+                    </div>
                     <!-- Input area for typing messages, uploading files, and sending -->
 
                     <div id="message-display" style="height:stretch;">
-                        <!-- Messages will be appended here -->
+                        <!-- Messages will be appended here -->          
                     </div>
                     <div id="message-input">
                         <div style="display: flex; flex-direction: column;">
@@ -189,14 +192,6 @@
                             <!-- Send Icon (Feather Icons - modified arrow) -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
-                    </div>
-                    <!-- Area for displaying error messages -->
-                    <!-- External Libraries -->
-                    <!-- marked.js: For rendering Markdown in AI responses -->
-                    <!-- Local Scripts -->
-                    <!-- script.js: Main application logic -->
-                    <div id="error-notification" style="display: none;">
-                        <p id="error-message"></p>
                     </div>
                 </div>
 
