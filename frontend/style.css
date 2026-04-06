@@ -280,6 +280,7 @@ body {
     gap: 8px; /* Reduced from 12px - Space between messages */
     background-color: var(--app-bg); /* Match app background */
     max-height:640px;
+    max-width: 700px;
 }
 
 /* Scrollbar Styling */
@@ -303,7 +304,7 @@ body {
 .message {
     position: relative; /* For copy button positioning */
     width: fit-content;
-    max-width: 85%; /* Increased horizontal space usage for better efficiency */
+    max-width: 90%; /* Increased horizontal space usage for better efficiency */
     padding: 8px 12px; /* Reduced from 10px 15px */
 /* Styles specific to AI messages (alignment, background) */
     border-radius: 18px; /* More rounded */
@@ -327,8 +328,8 @@ body {
 .ai-message {
     background-color: var(--ai-msg-bg);
     color: var(--text-color);
-    margin-right: auto;
-    margin-left: 0;
+    margin-left: auto;
+    margin-right: 20px;
 /* Styles for the copy-to-clipboard button on AI messages */
 /* Positioned absolutely, appears on hover */
     border-bottom-left-radius: 6px; /* Consistent corner */
@@ -588,7 +589,7 @@ body {
 /* --- Large Screen Responsive --- */
 @media (min-width: 1024px) {
     .message {
-        max-width: 75%; /* Increased for maximum horizontal space efficiency */
+        max-width: 90%; /* Increased for maximum horizontal space efficiency */
     }
 }
 
@@ -624,7 +625,7 @@ body {
     }
 
     .message {
-        max-width: 88%; /* Slightly more width */
+        max-width: 90%; /* Slightly more width */
         padding: 8px 12px;
     }
 
